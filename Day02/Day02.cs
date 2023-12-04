@@ -28,7 +28,26 @@ namespace AoC
 
         public static Int64 Day02b(string[] input)
         {
-            return 0;
+            var sum = 0;
+            foreach (var s in input)
+            {
+                var tokens = s.Split(' ');
+                var game = int.Parse(tokens[1].Substring(0, tokens[1].Length - 1));
+                var red = 0;
+                var green = 0;
+                var blue = 0;
+                for (int i = 2; i < tokens.Length; i += 2)
+                {
+                    var n = int.Parse(tokens[i]);
+                    var col = tokens[i + 1][0];
+                    if (col == 'r' && n > red) { red = n; }
+                    if (col == 'g' && n > green) { green = n; }
+                    if (col == 'b' && n > blue) { blue = n; }
+
+                }
+                sum += red * green * blue;
+            }
+            return sum;
         }
 
 

@@ -14,7 +14,7 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
 
         readonly Int64 resultA = 8;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 2286;
 
         [Fact]
         public void Day02a()
