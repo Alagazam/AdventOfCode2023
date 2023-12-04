@@ -6,21 +6,30 @@ namespace AoC
 {
     public class Day01Test
     {
-        readonly string input =
+        readonly string inputA =
 @"1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet
 ";
 
+        readonly string inputB =
+@"two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen
+";
         readonly Int64 resultA = 142;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 281;
 
         [Fact]
         public void Day01a()
         {
             var sw = Stopwatch.StartNew();
-            var lines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var lines = inputA.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             var result = Day01.Day01a(lines);
             Assert.Equal(resultA, result);
@@ -33,7 +42,7 @@ treb7uchet
         public void Day01b()
         {
             var sw = Stopwatch.StartNew();
-            var lines = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var lines = inputB.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             var result = Day01.Day01b(lines);
             Assert.Equal(resultB, result);
