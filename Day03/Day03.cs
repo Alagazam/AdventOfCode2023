@@ -66,9 +66,55 @@ namespace AoC
             CheckAdjacent(input, x + 1, y + 1);
         }
 
+        private static int GetGearParts(string[] input, int x, int y)
+        {
+            var first = 0;
+            var second = 0;
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (y + dy < 0 || y + dy > input.Length) continue;
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    if (dy == 0 && dx == 0) continue;
+                    if (x + dx < 0 || x + dx > input[y + dy].Length) continue;
+                    if (!Char.IsDigit(input[y + dy][x + dx])) continue;
+
+                    while (x + dx > 0 && Char.IsDigit(input[y + dy][x + dx - 1])) dx--;
+                    var a = 0;
+                    while (x + dx < input[y+dy].Length && Char.IsDigit(input[y+dy][x + dx]))
+                    {
+                        a = a * 10 + input[y+dy][x + dx] - '0';
+                        dx++;
+                    }
+                    if (first == 0)
+                    {
+                        first = a;
+                    }
+                    else
+                    {
+                        second = a;
+                        return first * second;
+                    }
+                }
+            }
+            return 0;
+        }
+
         public static Int64 Day03b(string[] input)
         {
-            return 0;
+            var sum = 0;
+
+            for (int y = 0; y != input.Length; ++y)
+            {
+                for (int x = 0; x != input[y].Length; ++x)
+                {
+                    if (input[y][x] == '*')
+                    {
+                        sum += GetGearParts(input, x, y);
+                    }
+                }
+            }
+            return sum;
         }
 
 

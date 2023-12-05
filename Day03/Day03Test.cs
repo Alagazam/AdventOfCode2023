@@ -19,7 +19,7 @@ namespace AoC
 .664.598.";
 
         readonly Int64 resultA = 4361;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 467835;
 
         [Fact]
         public void Day03a()
