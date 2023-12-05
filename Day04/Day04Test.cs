@@ -16,7 +16,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 ";
 
         readonly Int64 resultA = 13;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 30;
 
         [Fact]
         public void Day04a()

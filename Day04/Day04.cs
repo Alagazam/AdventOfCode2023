@@ -33,7 +33,22 @@ namespace AoC
 
         public static Int64 Day04b(string[] input)
         {
-            return 0;
+            var count = 0;
+            var next = new List<int>() { 1 };
+            foreach (var s in input)
+            {
+                var thiscount = next[0];
+                count += thiscount;
+                next.RemoveAt(0);
+                var score = win(s);
+                while (next.Count <= score) next.Add(1);
+                for (var i = 0;  i < score; i++)
+                {
+                    next[i]+= thiscount;
+                }
+            }
+            return count;
+
         }
 
 
