@@ -23,7 +23,13 @@ namespace AoC
 
         public static Int64 Day06b(string[] input)
         {
-            return 0;
+            var time = input[0].Replace(" ","").Split(':').Skip(1).Select(Int64.Parse).ToList()[0];
+            var record = input[1].Replace(" ", "").Split(':').Skip(1).Select(Int64.Parse).ToList()[0];
+
+            var root1 = (time + Math.Sqrt(time * time - 4 * record))/2;
+            var root2 = (time - Math.Sqrt(time * time - 4 * record))/2;
+
+            return (Int64)Math.Abs(root1 - root2);
         }
 
 

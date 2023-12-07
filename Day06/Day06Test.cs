@@ -12,7 +12,7 @@ Distance:  9  40  200
 ";
 
         readonly Int64 resultA = 288;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 71503;
 
         [Fact]
         public void Day06a()
