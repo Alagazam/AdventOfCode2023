@@ -1,8 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace AoC
 {
+    using ItemLength = Tuple<Int64, Int64>;
+    using ItemLengthList = List<Tuple<Int64, Int64>>;
+
     public static class Day05
     {
         public static IEnumerable<Int64> seeds = new List<Int64>();
@@ -17,17 +21,28 @@ namespace AoC
         public static List<Map> temperatureToHumidity = new List<Map> { };
         public static List<Map> humidityToLocation = new List<Map> { };
 
-        public static Int64 DoMap(Int64 item, List<Map> list)
+        public static Int64 Day05a(string[] input)
         {
-            var result = item;
-            foreach (Map map in list)
+            SetupMaps(input);
+
+            var minLoc = Int64.MaxValue;
+            foreach (var seed in seeds)
             {
-                if (item >= map.src && item < map.src + map.count) result = map.dest + (item - map.src);
+                var soil = DoMap(seed, seedToSoil);
+                var fertilizer = DoMap(soil, soilToFertilizer);
+                var water = DoMap(fertilizer, fertilizerToWater);
+                var light = DoMap(water, waterToLight);
+                var temperature = DoMap(light, lightToTemperature);
+                var humidity = DoMap(temperature, temperatureToHumidity);
+                var location = DoMap(humidity, humidityToLocation);
+
+                minLoc = Math.Min(minLoc, location);
             }
-            return result;
+
+            return minLoc;
         }
 
-        public static Int64 Day05a(string[] input)
+        private static void SetupMaps(string[] input)
         {
             List<Map> currentMap = new List<Map>();
             foreach (string s in input)
@@ -55,27 +70,97 @@ namespace AoC
                 var numbers = s.Split(' ').Select(Int64.Parse).ToList();
                 currentMap.Add(new Map { dest = numbers[0], src = numbers[1], count = numbers[2] });
             }
+        }
 
-            var minLoc = Int64.MaxValue;
-            foreach (var seed in seeds)
+        public static Int64 DoMap(Int64 item, List<Map> list)
+        {
+            var result = item;
+            foreach (Map map in list)
             {
-                var soil = DoMap(seed, seedToSoil);
-                var fertilizer = DoMap(soil, soilToFertilizer);
-                var water = DoMap(fertilizer, fertilizerToWater);
-                var light = DoMap(water, waterToLight);
-                var temperature = DoMap(light, lightToTemperature);
-                var humidity = DoMap(temperature, temperatureToHumidity);
-                var location = DoMap(humidity, humidityToLocation);
-
-                minLoc = Math.Min(minLoc, location);
+                if (item >= map.src && item < map.src + map.count) result = map.dest + (item - map.src);
             }
+            return result;
+        }
 
-            return minLoc;
+        public static ItemLengthList DoMap2(ItemLengthList itemList, List<Map> mapList)
+        {
+            var result = new ItemLengthList();
+            foreach (var item in itemList)
+            {
+                var start = item.Item1;
+                var len = item.Item2;
+
+                foreach (Map map in mapList)
+                {
+                    if (start >= map.src && start < map.src + map.count)
+                    {
+                        var first = map.dest + (start - map.src);
+                        var count = map.count - (first - map.dest);
+                        if (count > len) count = len;
+                        result.Add(new ItemLength(first, count));
+                        if (len - count > 0)
+                        {
+                            var rest = new ItemLength(start + count, len - count);
+                            result.AddRange(DoMap2([rest], mapList).ToArray());
+                        }
+                        break;
+                    }
+                    if (map.src >= start && map.src < start + len)
+                    {
+                        var first = map.dest;
+                        var count = len - (map.src - start);
+                        if (count > map.count) count = map.count;
+                        result.Add(new ItemLength(first, count));
+                        if (len - count > 0)
+                        {
+                            var rest = new ItemLength(start, len - count);
+                            result.AddRange(DoMap2([rest], mapList).ToArray());
+                        }
+                        if (start + len > map.src + map.count)
+                        {
+                            var rest = new ItemLength(map.src + map.count, len - map.count - (map.src - start));
+                            result.AddRange(DoMap2([rest], mapList).ToArray());
+                        }
+                        break;
+                    }
+                }
+                if (result.Count == 0)
+                {
+                    result.Add(new ItemLength(start, len));
+                }
+            }
+            return result;
         }
 
         public static Int64 Day05b(string[] input)
         {
-            return 0;
+            SetupMaps(input);
+
+            var minLoc = Int64.MaxValue;
+            var seed = 0L;
+            var length = 0L;
+            foreach (var s in seeds)
+            {
+                if (seed == 0) { seed = s; continue; }
+                length = s;
+                ItemLengthList items = [new ItemLength( seed, length)];
+
+                var soil = DoMap2(items, seedToSoil);
+                var fertilizer = DoMap2(soil, soilToFertilizer);
+                var water = DoMap2(fertilizer, fertilizerToWater);
+                var light = DoMap2(water, waterToLight);
+                var temperature = DoMap2(light, lightToTemperature);
+                var humidity = DoMap2(temperature, temperatureToHumidity);
+                var location = DoMap2(humidity, humidityToLocation);
+
+                foreach( var item in location)
+                {
+                    minLoc = Math.Min(minLoc, item.Item1);
+                }
+                seed = 0;
+            }
+
+            return minLoc;
         }
 
 

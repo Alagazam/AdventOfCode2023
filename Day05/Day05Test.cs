@@ -43,7 +43,7 @@ humidity-to-location map:
 ";
 
         readonly Int64 resultA = 35;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 46;
 
         [Fact]
         public void Day05a()
