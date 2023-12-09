@@ -32,7 +32,32 @@ namespace AoC
 
         public static Int64 Day08b(string[] input)
         {
-            return 0;
+            var node = new Node();
+            foreach (var s in input.Skip(1))
+            {
+                if (s == "") continue;
+                var parts = s.Split(' ');
+                node[parts[0]] = new Tuple<string, string>(parts[2].Substring(1, 3), parts[3].Substring(0, 3));
+            }
+            var startnodes = node.Keys.Where(s => s[2]=='A').ToArray();
+            var loops = new List<Int64>();
+            foreach (var start in startnodes)
+            {
+                var current = start;
+                var steps = 0;
+                while (current[2] != 'Z')
+                {
+                    foreach (var c in input[0])
+                    {
+                        if (c == 'L') current = node[current].Item1;
+                        else current = node[current].Item2;
+                        steps++;
+                        if (current[2] == 'Z') break;
+                    }
+                }
+                loops.Add(steps);
+            }
+            return AoC.Utils.LCM(loops);
         }
 
 
