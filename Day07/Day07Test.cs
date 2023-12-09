@@ -15,7 +15,7 @@ QQQJA 483
 ";
 
         readonly Int64 resultA = 6440;
-        readonly Int64 resultB = 0;
+        readonly Int64 resultB = 5905;
 
         [Fact]
         public void Day07a()
@@ -54,6 +54,27 @@ QQQJA 483
 
             Assert.Equal(1, comp.Compare(new Day07.Hand("KK677 1"), new Day07.Hand("KTJJT 1")));
             Assert.Equal(-1, comp.Compare(new Day07.Hand("T55J5 1"), new Day07.Hand("QQQJA 1")));
+        }
+
+        [Fact]
+        public void TestHandTypeWithJoker()
+        {
+            Assert.Equal(Day07.type.five, new Day07.Hand("QQQQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JQQQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JQJQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JQJQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JJJQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.four, new Day07.Hand("JJKQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.four, new Day07.Hand("J2JQQ 1").GetHandType(true));
+            Assert.Equal(Day07.type.four, new Day07.Hand("JQAQQ 1").GetHandType(true));
+
+            Assert.Equal(Day07.type.full, new Day07.Hand("J2255 1").GetHandType(true));
+            Assert.Equal(Day07.type.full, new Day07.Hand("JKKTT 1").GetHandType(true));
+            Assert.Equal(Day07.type.full, new Day07.Hand("KKAAJ 1").GetHandType(true));
+            Assert.Equal(Day07.type.three, new Day07.Hand("KQAAJ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JJAAJ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JJJAJ 1").GetHandType(true));
+            Assert.Equal(Day07.type.five, new Day07.Hand("JJJJJ 1").GetHandType(true));
         }
 
         public Day07Test(ITestOutputHelper output)
