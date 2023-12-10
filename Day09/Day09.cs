@@ -25,7 +25,13 @@ namespace AoC
 
         public static Int64 Day09b(string[] input)
         {
-            return 0;
+            var sum = 0L;
+            foreach (string s in input)
+            {
+                var array = s.Split(' ').Select(v => Int64.Parse(v)).Reverse().ToList();
+                sum += GetNextValue(array);
+            }
+            return sum;
         }
 
 
