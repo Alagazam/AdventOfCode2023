@@ -6,29 +6,35 @@ namespace AoC
     {
         public static Int64 Day11a(string[] input)
         {
+            return GetGalaxyDistanceSum(input);
+        }
+
+        public static Int64 GetGalaxyDistanceSum(string[] input, int growth = 2)
+        {
             // Find empty rows
             var emptyRows = Enumerable.Range(0, input.Length).Where(i => input[i].IndexOf('#') == -1).ToArray();
             // Find empty columns
             var emptyCols = Enumerable.Range(0, input[0].Length).Where(i => input.All(s => s[i] == '.')).ToArray();
 
-            var galaxies = new List<Tuple<int,int>>();
-            foreach (var row in Enumerable.Range(0,input.Length)) {
+            var galaxies = new List<Tuple<int, int>>();
+            foreach (var row in Enumerable.Range(0, input.Length))
+            {
                 foreach (var col in Enumerable.Range(0, input[row].Length))
                 {
-                    if (input[row][col] == '#') galaxies.Add(new Tuple<int,int>(row,col));
+                    if (input[row][col] == '#') galaxies.Add(new Tuple<int, int>(row, col));
                 }
             }
-            var sum = 0;
-            foreach (var g1 in Enumerable.Range(0, galaxies.Count-1))
+            Int64 sum = 0;
+            foreach (var g1 in Enumerable.Range(0, galaxies.Count - 1))
             {
-                foreach (var g2 in Enumerable.Range(g1 + 1, galaxies.Count - g1 -1))
+                foreach (var g2 in Enumerable.Range(g1 + 1, galaxies.Count - g1 - 1))
                 {
-                    var dist = Math.Abs(galaxies[g1].Item2 - galaxies[g2].Item2) + Math.Abs(galaxies[g1].Item1 - galaxies[g2].Item1);
+                    Int64 dist = Math.Abs(galaxies[g1].Item2 - galaxies[g2].Item2) + Math.Abs(galaxies[g1].Item1 - galaxies[g2].Item1);
 
-                    var addRows = emptyRows.Count(r => r > galaxies[g1].Item1 && r < galaxies[g2].Item1 || r > galaxies[g2].Item1 && r < galaxies[g1].Item1);
-                    var addCols = emptyCols.Count(c => c > galaxies[g1].Item2 && c < galaxies[g2].Item2 || c > galaxies[g2].Item2 && c < galaxies[g1].Item2);
+                    Int64 addRows = emptyRows.Count(r => r > galaxies[g1].Item1 && r < galaxies[g2].Item1 || r > galaxies[g2].Item1 && r < galaxies[g1].Item1);
+                    Int64 addCols = emptyCols.Count(c => c > galaxies[g1].Item2 && c < galaxies[g2].Item2 || c > galaxies[g2].Item2 && c < galaxies[g1].Item2);
 
-                    sum += dist + addCols+ addRows;
+                    sum += dist + addCols * (growth - 1) + addRows * (growth - 1);
                 }
             }
 
@@ -37,7 +43,7 @@ namespace AoC
 
         public static Int64 Day11b(string[] input)
         {
-            return 0;
+            return GetGalaxyDistanceSum(input, 1000000);
         }
 
 
